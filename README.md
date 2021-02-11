@@ -17,7 +17,7 @@ Name of the generated release.
 ## Example usage
 
 ```
-uses: actions/bosh-releaser@v1
+uses: orange-cloudfoundry/bosh-release-action@v1
 with:
   target_branch: master
 env:

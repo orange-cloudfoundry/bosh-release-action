@@ -20,7 +20,7 @@ jobs:
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: ${{ github.repository }}
+          images: orangeopensource/bosh-release-action
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
