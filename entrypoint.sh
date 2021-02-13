@@ -9,6 +9,10 @@ version=${version#v}
 
 
 name=$(yq -r .final_name config/final.yml)
+if [ "${name}" = "null" ]; then
+  name=$(yq -r .name config/final.yml)
+fi
+
 remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
 # configure git
