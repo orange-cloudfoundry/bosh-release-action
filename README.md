@@ -1,4 +1,4 @@
-# Bsoh release action
+#  Bosh release action
 
 This action generated a new version of final release
 
