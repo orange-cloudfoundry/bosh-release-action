@@ -1,6 +1,6 @@
 #  Bosh release action
 
-This action generated a new version of final release
+Github action to generate a new version of bosh final release
 
 ## Inputs
 
