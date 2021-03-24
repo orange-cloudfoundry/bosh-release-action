@@ -7,6 +7,10 @@ inputs:
     description: "Branch name to push release commit"
     required: false
     default: master
+  bundle:
+    description: "Install bundle at given version, useful for some pre_packaging scripts"
+    required: false
+    default: false
 
 outputs:
   file:

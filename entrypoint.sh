@@ -19,6 +19,14 @@ remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSIT
 git config --global user.name "actions/bosh-releaser@v1"
 git config --global user.email "<>"
 
+
+if [ ! -z "${INPUT_BUNDLE}" ] && [ "${INPUT_BUNDLE}" != "false" ]; then
+  echo "installing bundle: ${INPUT_BUNDLE}"
+  apk add ruby
+  gem install bundler -v "${INPUT_BUNDLE}"
+fi
+
+
 # remove existing release if any
 if [ -f releases/${name}/${name}-${version}.yml ]; then
   echo "removing pre-existing version ${version}"

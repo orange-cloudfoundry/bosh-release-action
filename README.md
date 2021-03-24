@@ -8,6 +8,10 @@ Github action to generate a new version of bosh final release
 
 The name of the branch where genereated release files sould be pushed. Default `"master"`.
 
+### `bundle`
+
+Install bundle at given version, useful for some pre_packaging scripts. Default `false`.
+
 ## Outputs
 
 ### `file`
