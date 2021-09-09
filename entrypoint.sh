@@ -66,6 +66,8 @@ fi
 
 if [ "${release}" == "true" ]; then
   echo "pushing changes to git repository"
+  git add .final_builds
+  git add releases/${name}/index.yml
   git add releases/${name}/${name}-${version}.yml
   git commit -a -m "cutting release ${version}"
   git push ${remote_repo} HEAD:${INPUT_TARGET_BRANCH}
