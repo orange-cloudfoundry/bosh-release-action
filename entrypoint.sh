@@ -21,7 +21,7 @@ if [ "${name}" = "null" ]; then
   name=$(yq -r .name config/final.yml)
 fi
 
-remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@${GITHUB_SERVER_URL#https://}/${GITHUB_REPOSITORY}.git"
 
 # configure git
 git config --global user.name "actions/bosh-releaser@v1"
