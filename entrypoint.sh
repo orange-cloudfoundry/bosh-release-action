@@ -16,6 +16,11 @@ elif [[ "$GITHUB_REF" == refs/pull/* ]]; then
   release=false
 fi
 
+PUSH_OPTIONS=""
+if [ "${OVERRIDE_EXISTING}" == "true" ];then
+  PUSH_OPTIONS="$PUSH_OPTIONS --force"
+fi
+
 name=$(yq -r .final_name config/final.yml)
 if [ "${name}" = "null" ]; then
   name=$(yq -r .name config/final.yml)
@@ -24,21 +29,15 @@ fi
 remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@${GITHUB_SERVER_URL#https://}/${GITHUB_REPOSITORY}.git"
 
 # configure git
-git config --global user.name "actions/bosh-releaser@v2"
+git config --global user.name "actions/bosh-packager@v2"
 git config --global user.email "<>"
 git config --global --add safe.directory /github/workspace
-
-if [ ! -z "${INPUT_BUNDLE}" ] && [ "${INPUT_BUNDLE}" != "false" ]; then
-  echo "installing bundle: ${INPUT_BUNDLE}"
-  apk add ruby
-  gem install bundler -v "${INPUT_BUNDLE}"
-fi
 
 if [ "${release}" == "true" ]; then
   # remove existing release if any
   if [ -f releases/${name}/${name}-${version}.yml ]; then
     echo "removing pre-existing version ${version}"
-    yq -r -y "{ \"builds\": (.builds | with_entries(select(.value.version != \"${version}\"))), \"format-version\": .[\"format-version\"]}" < releases/${name}/index.yml > tmp
+    yq -r "{ \"builds\": (.builds | with_entries(select(.value.version != \"${version}\"))), \"format-version\": .[\"format-version\"]}" < releases/${name}/index.yml > tmp
     mv tmp releases/${name}/index.yml
     rm -f releases/${name}/${name}-${version}.yml
     git commit -a -m "reset release ${version}"
@@ -70,11 +69,22 @@ if [ "${release}" == "true" ]; then
   git add releases/${name}/index.yml
   git add releases/${name}/${name}-${version}.yml
   git commit -a -m "cutting release ${version}"
-  git push ${remote_repo} HEAD:${INPUT_TARGET_BRANCH}
+
+  # Override any existing tag with same version. This may happen if only part of the renovate PRs were merged
+  git tag -a -m "cutting release ${version}" ${version} $PUSH_OPTIONS
+
+  git pull --rebase ${remote_repo}
+  if [ "${OVERRIDE_EXISTING}" == "true" ] && git rev-parse "$version" >/dev/null 2>&1; then
+    # Delete any existing release with same tag. Ignore push failure if no tag exists.
+    git push --delete ${remote_repo} ${version}
+  fi
+
+  git push ${remote_repo} HEAD:${INPUT_TARGET_BRANCH} --follow-tags # Push branch and tag
 fi
 
-# make asset readble outside docker image
+# make asset readable outside docker image
 chmod 644 ${name}-${version}.tgz
-echo "::set-output name=file::${name}-${version}.tgz"
-echo "::set-output name=version::${version}"
+# https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#environment-files
+echo "file=${name}-${version}.tgz" >> $GITHUB_OUTPUT
+echo "version=${version}"          >> $GITHUB_OUTPUT
 

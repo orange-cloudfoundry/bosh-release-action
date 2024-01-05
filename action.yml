@@ -10,7 +10,10 @@ inputs:
   tag_name:
     required: false
     description: "Tag name used to create the bosh release. Leave it empty to autodetect"
-
+  override_existing:
+    description: "override existing tag or release"
+    required: false
+    default: false
 outputs:
   file:
     description: "generated bosh release filename"
