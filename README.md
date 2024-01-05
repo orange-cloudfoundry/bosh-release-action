@@ -6,11 +6,19 @@ Github action to generate a new version of bosh final release
 
 ### `target_branch`
 
-The name of the branch where genereated release files sould be pushed. Default `"master"`.
+The name of the branch where generated release files should be pushed. Default `"master"`.
 
-### `bundle`
+### `tag_name`
+Tag name used to create the bosh release. Leave it empty to autodetect
 
-Install bundle at given version, useful for some pre_packaging scripts. Default `false`.
+required: `false`
+
+### `override_existing`
+override existing tag or release
+
+required: `false`
+
+default: `false`
 
 ## Outputs
 
