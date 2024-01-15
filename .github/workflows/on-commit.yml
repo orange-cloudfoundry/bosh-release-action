@@ -3,8 +3,6 @@ name: on-commit
 on:
   workflow_dispatch:
   push:
-    branches:
-      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,6 +16,6 @@ jobs:
 
       - name: Test dev release
         id: test_dev_release
-        uses: orange-cloudfoundry/create-bosh-release-action@${{github.sha}}
+        uses: orange-cloudfoundry/create-bosh-release-action@master
         with:
           target_branch: main
