@@ -1,0 +1,23 @@
+name: on-commit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        id: checkout_test_repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'create-bosh-release-action-test-boshrelease'
+          fetch-depth: 0
+
+      - name: Test dev release
+        id: test_dev_release
+        uses: orange-cloudfoundry/create-bosh-release-action@${{github.sha}}
+        with:
+          target_branch: main
