@@ -14,6 +14,9 @@ inputs:
     description: "override existing tag or release"
     required: false
     default: false
+  dir:
+    description: "Release directory path if not current working directory (default: .)"
+    default: "."
 outputs:
   file:
     description: "generated bosh release filename"

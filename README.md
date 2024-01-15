@@ -17,8 +17,13 @@ required: `false`
 override existing tag or release
 
 required: `false`
-
 default: `false`
+
+### `dir`
+Release directory path if not current working directory
+
+required: `false`
+default: `.`
 
 ## Outputs
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -15,7 +15,7 @@ elif [[ "$GITHUB_REF" == refs/pull/* ]]; then
   version=pr-${pull_number}
   release=false
 fi
-
+cd $DIR # We ensure we are in the right directory
 PUSH_OPTIONS=""
 if [ "${OVERRIDE_EXISTING}" == "true" ];then
   PUSH_OPTIONS="$PUSH_OPTIONS --force"
@@ -35,16 +35,16 @@ git config --global --add safe.directory /github/workspace
 
 if [ "${release}" == "true" ]; then
   # remove existing release if any
-  if [ -f releases/${name}/${name}-${version}.yml ]; then
+  if [ -f releases/"${name}"/"${name}"-"${version}".yml ]; then
     echo "removing pre-existing version ${version}"
     yq -r "{ \"builds\": (.builds | with_entries(select(.value.version != \"${version}\"))), \"format-version\": .[\"format-version\"]}" < releases/${name}/index.yml > tmp
-    mv tmp releases/${name}/index.yml
-    rm -f releases/${name}/${name}-${version}.yml
+    mv tmp releases/"${name}"/index.yml
+    rm -f releases/"${name}"/"${name}"-"${version}".yml
     git commit -a -m "reset release ${version}"
   fi
 fi
 
-if [ ! -z "${AWS_BOSH_ACCES_KEY_ID}" ]; then
+if [ -n "${AWS_BOSH_ACCES_KEY_ID}" ]; then
   cat - > config/private.yml <<EOS
 ---
 blobstore:
@@ -58,9 +58,9 @@ fi
 
 echo "creating bosh release: ${name}-${version}.tgz"
 if [ "${release}" == "true" ]; then
-  bosh create-release --force --final --version=${version} --tarball=${name}-${version}.tgz
+  bosh create-release --force --final --version="${version}" --tarball="${name}-${version}".tgz
 else
-  bosh create-release --force --timestamp-version --tarball=${name}-${version}.tgz
+  bosh create-release --force --timestamp-version --tarball="${name}-${version}".tgz
 fi
 
 if [ "${release}" == "true" ]; then
