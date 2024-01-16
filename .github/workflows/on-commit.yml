@@ -38,7 +38,7 @@ jobs:
           dir: create-bosh-release-action-test-boshrelease
 
       - name: Test final release
-        id: test_dev_release
+        id: test_final_release
         uses: ./create-bosh-release-action/ # uses: ./.github/actions/my-private-repo/my-action #https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-using-an-action-inside-a-different-private-repository-than-the-workflow
         with:
           target_branch: main
