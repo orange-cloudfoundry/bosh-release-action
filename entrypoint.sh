@@ -47,6 +47,7 @@ remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@${GITHUB_SERVER_URL#https:/
 git config --global user.name "actions/bosh-packager@v2"
 git config --global user.email "<>"
 git config --global --add safe.directory /github/workspace
+git config --global --add safe.directory /github/workspace/create-bosh-release-action-test-boshrelease
 git --no-pager config --global --list
 
 if [ "${release}" == "true" ]; then
