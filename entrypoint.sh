@@ -15,7 +15,11 @@ elif [[ "$GITHUB_REF" == refs/pull/* ]]; then
   version=pr-${pull_number}
   release=false
 fi
-cd $DIR # We ensure we are in the right directory
+
+if [[ "$DIR" != "." ]];then
+  cd $DIR # We ensure we are in the right directory
+fi
+
 PUSH_OPTIONS=""
 if [ "${OVERRIDE_EXISTING}" == "true" ];then
   PUSH_OPTIONS="$PUSH_OPTIONS --force"
