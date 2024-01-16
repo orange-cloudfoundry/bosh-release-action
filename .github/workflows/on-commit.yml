@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 #          ref: v1.0
 #          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          path: ./create-bosh-release-action-test-boshrelease/create-bosh-release-action
+          path: ./create-bosh-release-action-test-boshrelease
 
       - name: debug
         id: debug
@@ -32,7 +32,7 @@ jobs:
 
       - name: Test dev release
         id: test_dev_release
-        uses: ./create-bosh-release-action//create-bosh-release-action # uses: ./.github/actions/my-private-repo/my-action #https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-using-an-action-inside-a-different-private-repository-than-the-workflow
+        uses: ./create-bosh-release-action/create-bosh-release-action # uses: ./.github/actions/my-private-repo/my-action #https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-using-an-action-inside-a-different-private-repository-than-the-workflow
         with:
           target_branch: main
           dir: create-bosh-release-action-test-boshrelease
