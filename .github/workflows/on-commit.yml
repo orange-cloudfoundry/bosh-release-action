@@ -28,6 +28,7 @@ jobs:
         run: |
           du -a
           git config --global --add safe.directory /github/workspace/create-bosh-release-action-test-boshrelease
+          git --no-pager config --global --list
 
       - name: Test dev release
         id: test_dev_release
