@@ -15,10 +15,12 @@ elif [[ "$GITHUB_REF" == refs/pull/* ]]; then
   version=pr-${pull_number}
   release=false
 fi
-echo "dir: $INPUT_DIR"
-echo "override_existing: $INPUT_OVERRIDE_EXISTING"
-echo "tag_name: $INPUT_TAG_NAME"
-echo "target_branch: $INPUT_TARGET_BRANCH"
+
+echo "*** Inputs ***"
+echo "  dir: $INPUT_DIR"
+echo "  override_existing: $INPUT_OVERRIDE_EXISTING"
+echo "  tag_name: $INPUT_TAG_NAME"
+echo "  target_branch: $INPUT_TARGET_BRANCH"
 
 if [[ "$INPUT_DIR" != "." ]];then
   cd $INPUT_DIR # We ensure we are in the right directory
