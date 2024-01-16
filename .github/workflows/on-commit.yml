@@ -11,7 +11,7 @@ jobs:
         id: checkout_test_repo
         uses: actions/checkout@v4
         with:
-          repository: 'create-bosh-release-action-test-boshrelease'
+          repository: 'orange-cloudfoundry/create-bosh-release-action-test-boshrelease'
           fetch-depth: 0
 
       - name: Test dev release
