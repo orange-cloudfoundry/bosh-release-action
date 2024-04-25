@@ -20,4 +20,4 @@ outputs:
 
 runs:
   using: "docker"
-  image: "docker://orangeopensource/bosh-release-action:v2"
+  image: "docker://orangeopensource/bosh-release-action:v7"
