@@ -3,21 +3,25 @@
 set -e
 
 # extract info
-if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+case "${GITHUB_REF:?required}" in
+refs/tags/*)
   version=${GITHUB_REF#refs/tags/}
   version=${version#v}
   release=true
-elif [[ "$GITHUB_REF" == refs/heads/* ]]; then
+  ;;
+refs/heads/*)
   version=${GITHUB_REF#refs/heads/}
   release=false
-elif [[ "$GITHUB_REF" == refs/pull/* ]]; then
+  ;;
+refs/pull/*)
   pull_number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
   version=pr-${pull_number}
   release=false
-fi
+  ;;
+esac
 
 name=$(yq -r .final_name config/final.yml)
-if [ "${name}" = "null" ]; then
+if [ "${name}" = null ]; then
   name=$(yq -r .name config/final.yml)
 fi
 
