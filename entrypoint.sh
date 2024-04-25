@@ -79,6 +79,6 @@ fi
 
 # make asset readble outside docker image
 chmod 0644 "${name}-${version}.tgz"
-echo "::set-output name=file::${name}-${version}.tgz"
-echo "::set-output name=version::${version}"
+>>"${GITHUB_OUTPUT}" echo "file=${name}-${version}.tgz"
+>>"${GITHUB_OUTPUT}" echo "version=${version}"
 
