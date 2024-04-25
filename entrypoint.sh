@@ -28,24 +28,24 @@ git config --global user.name "actions/bosh-releaser@v2"
 git config --global user.email "<>"
 git config --global --add safe.directory /github/workspace
 
-if [ ! -z "${INPUT_BUNDLE}" ] && [ "${INPUT_BUNDLE}" != "false" ]; then
+if [ -n "${INPUT_BUNDLE}" ] && [ "${INPUT_BUNDLE}" != false ]; then
   echo "installing bundle: ${INPUT_BUNDLE}"
   apk add ruby
   gem install bundler -v "${INPUT_BUNDLE}"
 fi
 
-if [ "${release}" == "true" ]; then
+if [ "${release}" = true ]; then
   # remove existing release if any
-  if [ -f releases/${name}/${name}-${version}.yml ]; then
+  if [ -f "releases/${name}/${name}-${version}.yml" ]; then
     echo "removing pre-existing version ${version}"
-    yq -r -y "{ \"builds\": (.builds | with_entries(select(.value.version != \"${version}\"))), \"format-version\": .[\"format-version\"]}" < releases/${name}/index.yml > tmp
-    mv tmp releases/${name}/index.yml
-    rm -f releases/${name}/${name}-${version}.yml
+    yq -r -y "{ \"builds\": (.builds | with_entries(select(.value.version != \"${version}\"))), \"format-version\": .[\"format-version\"]}" < "releases/${name}/index.yml" > tmp
+    mv tmp "releases/${name}/index.yml"
+    rm -f "releases/${name}/${name}-${version}.yml"
     git commit -a -m "reset release ${version}"
   fi
 fi
 
-if [ ! -z "${AWS_BOSH_ACCES_KEY_ID}" ]; then
+if [ -n "${AWS_BOSH_ACCES_KEY_ID}" ]; then
   cat - > config/private.yml <<EOS
 ---
 blobstore:
@@ -58,23 +58,23 @@ else
 fi
 
 echo "creating bosh release: ${name}-${version}.tgz"
-if [ "${release}" == "true" ]; then
-  bosh create-release --force --final --version=${version} --tarball=${name}-${version}.tgz
+if [ "${release}" = true ]; then
+  bosh create-release --force --final --version="${version}" --tarball="${name}-${version}.tgz"
 else
-  bosh create-release --force --timestamp-version --tarball=${name}-${version}.tgz
+  bosh create-release --force --timestamp-version --tarball="${name}-${version}.tgz"
 fi
 
-if [ "${release}" == "true" ]; then
+if [ "${release}" = true ]; then
   echo "pushing changes to git repository"
   git add .final_builds
-  git add releases/${name}/index.yml
-  git add releases/${name}/${name}-${version}.yml
+  git add "releases/${name}/index.yml"
+  git add "releases/${name}/${name}-${version}.yml"
   git commit -a -m "cutting release ${version}"
-  git push ${remote_repo} HEAD:${INPUT_TARGET_BRANCH}
+  git push "${remote_repo}" "HEAD:${INPUT_TARGET_BRANCH}"
 fi
 
 # make asset readble outside docker image
-chmod 644 ${name}-${version}.tgz
+chmod 0644 "${name}-${version}.tgz"
 echo "::set-output name=file::${name}-${version}.tgz"
 echo "::set-output name=version::${version}"
 
