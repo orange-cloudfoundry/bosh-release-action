@@ -6,11 +6,11 @@ Github action to generate a new version of bosh final release
 
 ### `target_branch`
 
-The name of the branch where genereated release files sould be pushed. Default `"master"`.
+The name of the branch where generated release files should be pushed; default `"master"`.
 
 ### `bundle`
 
-Install bundle at given version, useful for some pre_packaging scripts. Default `false`.
+Install bundle at given version, useful for some pre_packaging scripts; default `false`.
 
 ## Outputs
 
@@ -20,7 +20,7 @@ Name of the generated release.
 
 ## Example usage
 
-```
+```yaml
 uses: orange-cloudfoundry/bosh-release-action@v7
 with:
   target_branch: master
